@@ -1,4 +1,4 @@
-package com.tdd.tdd;
+package com.tdd.tdd.login;
 
 import com.tdd.tdd.user.User;
 import org.junit.Test;
@@ -16,22 +16,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class UserControllerTest {
+public class LoginControllerTest {
+    public static final String API_1_0_LOGIN = "/api/1.0/login";
 
     @Autowired
-    TestRestTemplate testRestTemplate;
+    private TestRestTemplate testRestTemplate;
 
-    @Test
-    public void postUser_whenUserIsValid_receivedOk() {
-        User user = new User();
-        user.setUsername("test-user");
-        user.setDisplayName("test-display");
-        user.setPassword("Password");
-
-        ResponseEntity<Object> response = testRestTemplate.postForEntity("/api/1.0/users", user, Object.class);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-
+    private <T> ResponseEntity<T> login(Class<T> responseType) {
+        return testRestTemplate.postForEntity(API_1_0_LOGIN, null, responseType);
     }
 
+    @Test
+    public void postLogin_withoutUserCredentials_recieveUnauthorized() {
+        ResponseEntity<Object> response = login(Object.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    }
 }

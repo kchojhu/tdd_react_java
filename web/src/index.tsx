@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import UserSignupPage from "./pages/UserSignupPage";
+import UserSignupPage, {UserSignupAction} from "./pages/UserSignupPage";
+import * as apiCalls from './api/apiCalls';
+
+const actions:UserSignupAction = {
+    postSignup: apiCalls.signup
+}
 
 ReactDOM.render(
   <React.StrictMode>
-    <UserSignupPage />
+    <UserSignupPage actions={actions}/>
   </React.StrictMode>,
   document.getElementById('root')
 );
